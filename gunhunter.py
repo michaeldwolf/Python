@@ -1,14 +1,14 @@
 import requests
 import requests_oauthlib
 import os
-import urllib2
+import urllib.request
 import base64
 import time
 import Imagga
 import json
 from PIL import Image
 from pprint import pprint
-
+###http://restunited.com/docs/6y5u4ersttz3
 # initialize the API client
 api_client = Imagga.swagger.ApiClient(api_server="https://api.imagga.com/v1")
 
@@ -17,11 +17,12 @@ api_client.username = 'IMAGGA_USER'
 api_client.password = 'IMAGGA_PWD'
 
 custom_tags = set(["gun", "revolver", "weapon", "pistol", "firearm", "machine gun", "rifle"])
-
-client_key = "acc_6bce1547c2cfbcc"
-client_secret = "223cdba47129a87a4d40c033d0eecd00"
-token = "TOKEN"
-token_secret = "TOKEN_SECRET"
+#acc_6bce1547c2cfbcc
+#223cdba47129a87a4d40c033d0eecd00
+client_key = "vcsl5m7XzOQ62IHA9qPEpFnX6 "
+client_secret = "Fjke8JDQGXiaDYUzSLu3Ej1gE2dD5XD2VYTziwkioRyhqfANqC "
+token = "030963886-xoVSqdW7LqbYP6E9LAYHhA3kP75lg1seNCiYNnE"
+token_secret = "BHCYuaTM42vx0aOKai75tpzvNxBh1R6l50wC9CccpCyUX"
 
 oauth = requests_oauthlib.OAuth1(client_key, client_secret, token, token_secret)
 
@@ -130,12 +131,10 @@ def tag_image(content_id):
     matches = tags.intersection(custom_tags)
 
     if len(matches):
-        print
-        "[*] Image matches! => ",
-
+        print( "[*] Image matches! => ")
         for match in matches:
-            print
-            match,
+            print(match)
+
 
         return True
 
@@ -224,8 +223,8 @@ def detect_guns(image_path):
 
 full_tweet_list = download_all_tweets("sikdrive_corn")
 
-print
-"[*] Retrieved %d Tweets. Processing now..." % len(full_tweet_list)
+print("[*] Retrieved %d Tweets. Processing now..." % len(full_tweet_list))
+
 
 if not os.path.exists("gunphotos"):
     os.mkdir("gunphotos")
@@ -241,8 +240,7 @@ for tweet in full_tweet_list:
 
                 for media in tweet['extended_entities']['media']:
 
-                    print
-                    "[*] Downloading photo %s" % media['media_url']
+                    print("[*] Downloading photo %s" % media['media_url'])
 
                     photo_count += 1
 
