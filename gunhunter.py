@@ -4,21 +4,22 @@ import os
 import urllib.request
 import base64
 import time
-import Imagga
 import json
-from PIL import Image
+import Pillow
 from pprint import pprint
-###http://restunited.com/docs/6y5u4ersttz3
 # initialize the API client
-api_client = Imagga.swagger.ApiClient(api_server="https://api.imagga.com/v1")
 
+import requests
+
+
+print(response.json())
 # authentication setting using user name and password
-api_client.username = 'IMAGGA_USER'
-api_client.password = 'IMAGGA_PWD'
+api_key = 'acc_6bce1547c2cfbcc'
+api_secret = '223cdba47129a87a4d40c033d0eecd00'
 
 custom_tags = set(["gun", "revolver", "weapon", "pistol", "firearm", "machine gun", "rifle"])
-#acc_6bce1547c2cfbcc
-#223cdba47129a87a4d40c033d0eecd00
+#
+#
 client_key = "vcsl5m7XzOQ62IHA9qPEpFnX6 "
 client_secret = "Fjke8JDQGXiaDYUzSLu3Ej1gE2dD5XD2VYTziwkioRyhqfANqC "
 token = "030963886-xoVSqdW7LqbYP6E9LAYHhA3kP75lg1seNCiYNnE"
