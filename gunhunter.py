@@ -5,14 +5,14 @@ import urllib.request
 import base64
 import time
 import json
-import Pillow
+import PIL
+import tweepy
 from pprint import pprint
 # initialize the API client
 
 import requests
 
 
-print(response.json())
 # authentication setting using user name and password
 api_key = 'acc_6bce1547c2cfbcc'
 api_secret = '223cdba47129a87a4d40c033d0eecd00'
@@ -20,10 +20,10 @@ api_secret = '223cdba47129a87a4d40c033d0eecd00'
 custom_tags = set(["gun", "revolver", "weapon", "pistol", "firearm", "machine gun", "rifle"])
 #
 #
-client_key = "vcsl5m7XzOQ62IHA9qPEpFnX6 "
-client_secret = "Fjke8JDQGXiaDYUzSLu3Ej1gE2dD5XD2VYTziwkioRyhqfANqC "
-token = "030963886-xoVSqdW7LqbYP6E9LAYHhA3kP75lg1seNCiYNnE"
-token_secret = "BHCYuaTM42vx0aOKai75tpzvNxBh1R6l50wC9CccpCyUX"
+client_key = "3L0sSUuDyTxxSvVSy7vrQ2j1X"
+client_secret = "mEuvmFnxSysdSC73Y21s0zSr0jZcMmZpkQDbU3ekiJv9Swb2HK"
+token = "3030963886-ltID6D8xMD5p9qyjzh49aTcGTS65RTUjiJUXekn"
+token_secret = "BwkpeCw57nWxghvCkelruzkiX38deEaLdiklmXV69kQDx"
 
 oauth = requests_oauthlib.OAuth1(client_key, client_secret, token, token_secret)
 
@@ -117,9 +117,11 @@ def upload_file(image_path):
 # Submits an uploaded file to the tagging API.
 #
 def tag_image(content_id):
-    tagging_api = Imagga.TaggingApi(api_client)
+    response = requests.get('https://api.imagga.com/v2/tags?image_url%s' % image_path,
+			auth=(api_key, api_secret))
+	#tagging_api = Imagga.TaggingApi(api_client)
 
-    response = tagging_api.tagging(content=content_id)
+    response = response.json(content=content_id)
     result = response.to_dict()
 
     tags = []
@@ -220,9 +222,9 @@ def detect_guns(image_path):
 
 
 # set exact path here
-# detect_guns("/Users/justin/Desktop/testimage.jpg")
+detect_guns("/Users/justin/Desktop/testimage.jpg")
 
-full_tweet_list = download_all_tweets("sikdrive_corn")
+full_tweet_list = download_all_tweets("NASA")
 
 print("[*] Retrieved %d Tweets. Processing now..." % len(full_tweet_list))
 
@@ -235,9 +237,9 @@ match_count = 0
 
 for tweet in full_tweet_list:
 
-    if tweet.has_key("extended_entities"):
+    if tweet in ("extended_entities"):
         if tweet['extended_entities'] is not None:
-            if tweet['extended_entities'].has_key("media"):
+            if tweet['extended_entities'] in ("media"):
 
                 for media in tweet['extended_entities']['media']:
 
