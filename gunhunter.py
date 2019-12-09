@@ -237,7 +237,7 @@ match_count = 0
 
 for tweet in full_tweet_list:
 
-    if tweet in ("extended_entities"):
+    if str(tweet) in ("extended_entities"):
         if tweet['extended_entities'] is not None:
             if tweet['extended_entities'] in ("media"):
 
