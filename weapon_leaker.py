@@ -103,15 +103,16 @@ def download_all_tweets(username):
 #
 def upload_file(image_path):
     try:
-        content_api = Imagga.ContentApi(api_client)
-        response = content_api.upload(image_path)
+        response = requests.post('https://api.imagga.com/v2/categories/personal_photos',
+	auth=(api_key, api_secret),
+	files={'image': open(image_path, 'rb')})
+        #response = content_api.upload(image_path)
 
         return response.to_dict()["uploaded"][0]["id"]
 
     except:
 
         return None
-
 
 #
 # Submits an uploaded file to the tagging API.
@@ -224,7 +225,7 @@ def detect_guns(image_path):
 # set exact path here
 detect_guns("/Users/justin/Desktop/testimage.jpg")
 
-full_tweet_list = download_all_tweets("NASA")
+full_tweet_list = download_all_tweets("NRA")
 
 print("[*] Retrieved %d Tweets. Processing now..." % len(full_tweet_list))
 
