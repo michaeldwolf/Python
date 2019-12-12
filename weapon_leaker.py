@@ -16,21 +16,34 @@ import requests
 # authentication setting using user name and password
 api_key = 'acc_6bce1547c2cfbcc'
 api_secret = '223cdba47129a87a4d40c033d0eecd00'
+"""
+These api keys are for imagga
 
+"""
+
+#Create a dict of tags that we want to detect for in an image
 custom_tags = set(["gun", "revolver", "weapon", "pistol", "firearm", "machine gun", "rifle"])
-#
-#
+
 client_key = "3L0sSUuDyTxxSvVSy7vrQ2j1X"
 client_secret = "mEuvmFnxSysdSC73Y21s0zSr0jZcMmZpkQDbU3ekiJv9Swb2HK"
 token = "3030963886-ltID6D8xMD5p9qyjzh49aTcGTS65RTUjiJUXekn"
 token_secret = "BwkpeCw57nWxghvCkelruzkiX38deEaLdiklmXV69kQDx"
-
+#Twitter API auth settings
 oauth = requests_oauthlib.OAuth1(client_key, client_secret, token, token_secret)
-
+#Setup out connection to twitter for later use
 
 #
 # Download Tweets from a user profile
 #
+"""
+This function takes a screen name and gets the latest 2000 tweets
+Built in error checking for HTTP status codes included for debugging
+
+
+Params: screen_name
+Returns 
+	tweets
+"""
 def download_tweets(screen_name, max_id=None):
     api_url = "https://api.twitter.com/1.1/statuses/user_timeline.json?"
     api_url += "screen_name=%s&" % screen_name
@@ -58,6 +71,18 @@ def download_tweets(screen_name, max_id=None):
 #
 # Takes a username and begins downloading all Tweets
 #
+
+
+"""
+Store the tweets and create an id list of all the tweets
+
+Params:
+
+Username
+
+Returns:
+	the full list of tweets that are downloaded
+"""
 def download_all_tweets(username):
     full_tweet_list = []
     max_id = 0
@@ -101,6 +126,14 @@ def download_all_tweets(username):
 #
 # Uploads image file to Imagga for processing.
 #
+
+
+"""
+Take the path of the image and auth to the imagga api and store the pic under personal uploads
+
+
+Returns the content ID of the image
+"""
 def upload_file(image_path):
     try:
         response = requests.post('https://api.imagga.com/v2/categories/personal_photos',
@@ -117,6 +150,13 @@ def upload_file(image_path):
 #
 # Submits an uploaded file to the tagging API.
 #
+
+
+"""
+Take the content ID and send it to the image tagging end point
+
+Store the tags and check if they match out list
+"""
 def tag_image(content_id):
     response = requests.get('https://api.imagga.com/v2/tags?image_url%s' % image_path,
 			auth=(api_key, api_secret))
@@ -148,6 +188,13 @@ def tag_image(content_id):
 #
 # Splits image into thirds both vertically and horizontally.
 #
+
+"""
+Take the image and split it up into thirds
+This is done to help API detect images
+Needed for the old version of the api to get decent results
+V2 it still helps
+"""
 def split_image(image_path):
     ext = image_path.split(".")[-1]
 
@@ -202,6 +249,11 @@ def split_image(image_path):
 #
 # Wrapper function that kicks off the entire detection process.
 #
+
+
+"""
+Start searching for images
+"""
 def detect_guns(image_path):
     print("[*] Trying image %s" % image_path)
 
@@ -221,21 +273,23 @@ def detect_guns(image_path):
             print("[*] Image matches!")
             return True
 
-
-# set exact path here
-detect_guns("/Users/justin/Desktop/testimage.jpg")
-
+#The user name to get all the tweets from
 full_tweet_list = download_all_tweets("NRA")
 
 print("[*] Retrieved %d Tweets. Processing now..." % len(full_tweet_list))
 
-
+#Make a folder for gunphotos
 if not os.path.exists("gunphotos"):
     os.mkdir("gunphotos")
 
 photo_count = 0
 match_count = 0
-
+"""
+Take the list of tweets
+and check the response from the twitter API for media
+Check to see if the media is an image and store the URL
+Download the image to the gunphotos folder
+"""
 for tweet in full_tweet_list:
     try:
         for media in tweet['extended_entities']['media']:
@@ -263,4 +317,4 @@ for tweet in full_tweet_list:
     except: 
         pass
 
-print("[*] Finished! Checked %d photos and detected %d with weapons." % (photo_count, match_count))
+print("[*] Finished! Checked %d photos found %d with weapons present." % (photo_count, match_count))
